@@ -123,6 +123,7 @@ public class Map {
                     /*System.out.println()*/
                 }
             }
+            System.out.println("");
         }
         public static color demandeCouleur(int[][] tab,int joueur){
             Scanner scan = new Scanner(System.in);
@@ -144,9 +145,9 @@ public class Map {
         }
 
         public static Boolean choixCouleur(color couleur, int[][] tab, int joueur){
-            /* la couleur est déja possédée?
-                la couleur est à coté?
-                on est dans le tableau?
+            /* retourn false si on a choisit une couleur invalide
+                si on a prit sa propre couleur ou celle de son adversaire
+                si on a pris un couleur qui n'est pas autour de notre position
             */
             int lignes = tab.length;
             int colones = tab[0].length;
@@ -177,7 +178,7 @@ public class Map {
             int colonesTab = tab[0].length;*/
             for(int i=lignes-1; i<=lignes+1;i++){
                 for(int j=colones-1; j<=colones+1;j++){
-                    if(i>=0 && i<tab.length && j>=0 && j<tab[0].length){  //avec ca onverifie ci la case qu'on étudie est bien sur le plateau et pas a l'exterieur
+                    if(i>=0 && i<tab.length && j>=0 && j<tab[0].length){  //avec ca on verifie si la case qu'on étudie est bien sur le plateau et pas a l'exterieur
                         int test = tab[i][j]/10;
                         if (couleur.numero == test){
                             return true;

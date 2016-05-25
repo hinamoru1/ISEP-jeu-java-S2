@@ -25,9 +25,13 @@ public class JeuDesCouleursJava {
         while(casePosedeMax(carteReele)==false){
             System.out.println("PREMIER JOUEUR A TOI DE JOUER");
             couleurAJouer = Map.demandeCouleur(carteReele,1); //premiere joueur qui choisit sa couleur
+            carteReele = caseAEtudier(carteReele,couleurAJouer,1);//ca modifie les valleurs
+            yolo.afficheTableau(carteReele);//on affiche
             
             System.out.println("DEUXIEME JOUEUR A TOI DE JOUER");
             couleurAJouer = Map.demandeCouleur(carteReele,2); //deuxieme joueur qui choisit sa couleur
+            carteReele = caseAEtudier(carteReele,couleurAJouer,2);
+            yolo.afficheTableau(carteReele);
         }
     }
     
@@ -59,6 +63,35 @@ public class JeuDesCouleursJava {
         }
         return false;
     }
+    public static void mettreAJourLaCarte(int[][] tab,color couleur,int joueur){
+        
+    }
+    public static int[][] caseAEtudier(int[][] tab,color couleur,int joueur){
+        int lignes = tab.length;
+        int colones = tab[0].length;
+        //on se ballade sur le plateau pour trouve une case possedee par le joueur
+        for(int k=0;k<lignes;k++){
+            for(int l=0;l<colones;l++){
+                Integer valleurCase = tab[k][l]%10;
+                if(valleurCase.equals(joueur)){
+                    tab[k][l] = couleur.numero*10+joueur;
+                    //on en a trouvée une maintenant on se ballade AUTOUR de CETTE case
+                    for(int i=k-1; i<=k+1;i++){
+                        for(int j=l-1; j<=l+1;j++){
+                            if(i>=0 && i<tab.length && j>=0 && j<tab[0].length){  //avec ca on verifie si la case qu'on étudie est bien sur le plateau et pas a l'exterieur
+                                int test = tab[i][j]/10;    //on prend la couleur,le premier numero du chiffre, de la case qu'on etudie
+                                if (couleur.numero == test){
+                                    tab[i][j] = tab[i][j]+joueur; //on vient de marquer la case comme appartenant à un joueur
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return tab;
+    }
+    
     
     }
     
