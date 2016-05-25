@@ -8,6 +8,7 @@ package jeudescouleursjava;
 import java.lang.*;
 import java.util.Random;
 import java.util.HashMap;
+import java.util.Scanner;
 /**
  *
  * @author nicolas
@@ -21,7 +22,7 @@ public class Map {
     color bleu = new color("B", "b", 5) ;
     color indigo = new color("I", "i", 6) ;
     //on cree une table de achage
-    HashMap<Integer,color> ht = new HashMap<>();
+    static HashMap<Integer,color> ht = new HashMap<>();
     {
     ht.put(1, rouge);
     ht.put(2, orange);
@@ -51,8 +52,54 @@ public class Map {
             DeffaultGrille[0][0] += 1;
             DeffaultGrille[lignes-1][colones-1] += 2;
             //fin initialisation depart
-
+            
+            //on enleve les couleurs relout dans coin superieur gauche
+            for (int i=0 ; i<=1 ; i++){
+                for (int j=0;j<=1;j++){
+                    //System.out.println("hey on va retap");
+                    //System.out.println("coin top gauche : "+DeffaultGrille[i][j]);
+                    adapterCouleurCase(i,j,DeffaultGrille);
+                    //System.out.println("//////////////////////////////////////////");
+                    
+                }
+            }
+            //on fait pareil pour le bas gauche
+            for (int i=lignes-2 ; i<=lignes-1 ; i++){
+                for (int j=colones-2;j<=colones-1;j++){
+                    //System.out.println("coin bot droit : "+DeffaultGrille[i][j]);
+                    adapterCouleurCase(i,j,DeffaultGrille);
+                    //System.out.println("//////////////////////////////////////////");
+                    
+                }
+            }
+            
             return DeffaultGrille;
+        }
+        
+        //fait en sorte de  changer la couleur d'une case (pour eviter les cas tu commence et tu peux pas jouer)
+        public static int adapterCouleurCase(int horizontal, int vertical, int[][] tab){
+            int lignes = tab.length;
+            int colones = tab[0].length;
+            if(vertical==0 && horizontal==0 ){
+                return tab[horizontal][vertical];
+            }
+            if(vertical==lignes-1 && horizontal==colones-1 ){
+                return tab[horizontal][vertical];
+            }
+            while(tab[horizontal][vertical]/10==tab[lignes-1][colones-1]/10 || tab[horizontal][vertical]/10==tab[0][0]/10){
+                Random aleatoire = new Random();
+                int nombre = aleatoire.nextInt(6)+1;
+                /*System.out.println("horizontal : "+horizontal);
+                System.out.println("lignes-1 : "+lignes);
+                System.out.println("tab[horizontal][vertical] : "+tab[horizontal][vertical]/10);
+                System.out.println("tab[0][0] : "+tab[0][0]/10);
+                System.out.println("tab[lignes-1][colones-1] : "+tab[lignes-1][colones-1]/10);
+                System.out.println("modif de la tab : "+tab[horizontal][vertical]);
+                System.out.println("________________________________________________");*/
+                tab[horizontal][vertical]=nombre*10;
+                
+            }
+            return tab[horizontal][vertical];
         }
 
         public color trouverCouleur(int pouet){
@@ -77,6 +124,24 @@ public class Map {
                 }
             }
         }
+        public static color demandeCouleur(int[][] tab,int joueur){
+            Scanner scan = new Scanner(System.in);
+            System.out.println("choisit une couleur 1 pour r 2|o 3|j 4|v 5|b 6|i");
+            System.out.println("ton choix? : ");
+            int a = scan.nextInt();
+            
+            if (choixCouleur(ht.get(a),tab,joueur)==false){
+                System.out.println("tu ne peux pas prendre cette couleur");
+                System.out.println("________________________________________________");
+                System.out.println("essaye encore >:)");
+                demandeCouleur(tab,joueur);
+                
+            }
+            
+            System.out.println("tu as choisis : "+a);
+            System.out.println("________________________________________________");
+            return ht.get(a);
+        }
 
         public static Boolean choixCouleur(color couleur, int[][] tab, int joueur){
             /* la couleur est déja possédée?
@@ -85,10 +150,12 @@ public class Map {
             */
             int lignes = tab.length;
             int colones = tab[0].length;
-            int couleurJoueur1 = tab[0][0]/10;
-            int CouleurJoueur2 = tab[lignes-1][colones-1];
+            Integer couleurJoueur1 = tab[0][0]/10;
+            Integer CouleurJoueur2 = tab[lignes-1][colones-1]/10;
+            Integer numCouleur = couleur.numero;
             //la couleur n'est pas celle d'un joueur
-            if(couleurJoueur1==couleur.numero && CouleurJoueur2==couleur.numero){
+            if((couleurJoueur1.equals(numCouleur)) || (CouleurJoueur2.equals(numCouleur))){
+                System.out.println("boucle de dieu");
                 return false;
             }
             //la couleur est bien selectionnable (elle est présente dans l'environnement imedia de la zone controlée)
@@ -110,7 +177,7 @@ public class Map {
             int colonesTab = tab[0].length;*/
             for(int i=lignes-1; i<=lignes+1;i++){
                 for(int j=colones-1; j<=colones+1;j++){
-                    if(i>0 && i<tab.length && j>0 && j<tab[0].length){  //avec ca onverifie ci la case qu'on étudie est bien sur le plateau et pas a l'exterieur
+                    if(i>=0 && i<tab.length && j>=0 && j<tab[0].length){  //avec ca onverifie ci la case qu'on étudie est bien sur le plateau et pas a l'exterieur
                         int test = tab[i][j]/10;
                         if (couleur.numero == test){
                             return true;
