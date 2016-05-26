@@ -117,6 +117,7 @@ public class Map {
                         System.out.print(trouverCouleur(col).initial+" "); //car non possédé
                     }
                     else{
+                        //int testtest = tableau[i][j]%10;
                         int col = tableau[i][j]/10;
                         System.out.print(trouverCouleur(col).Initial+" "); //car possédé
                     }
