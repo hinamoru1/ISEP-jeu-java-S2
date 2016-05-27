@@ -16,19 +16,26 @@ public class JeuDesCouleursJava {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         Map yolo=  new Map();
-        int[][] carteReele = yolo.creationTableau(5,5); //on met la carte cree dans une variable
         
+        int dimentionTableau = Map.definitionTailleTableau();
+        int nbLignesCarte = trouverNbLignes(dimentionTableau);
+        int nbColonnesCarte = trouverNbColonnes(dimentionTableau);
+        int[][] carteReele = yolo.creationTableau(nbLignesCarte,nbColonnesCarte); //on met la carte cree dans une variable
+        
+        //int[][] carteReele = yolo.creationTableau(9,9); //on met la carte cree dans une variable
         yolo.afficheTableau(carteReele);
 //        System.out.println("");
 //        casePosedeMax(carteReele);
+        
         color couleurAJouer1;
+                
         color couleurAJouer2;
         while(casePosedeMax(carteReele)==false){
             System.out.println("PREMIER JOUEUR A TOI DE JOUER");
             couleurAJouer1 = Map.demandeCouleur(carteReele,1); //premiere joueur qui choisit sa couleur
             carteReele = caseAEtudier(carteReele,couleurAJouer1,1);//ca modifie les valleurs
             yolo.afficheTableau(carteReele);//on affiche
-            
+
             System.out.println("DEUXIEME JOUEUR A TOI DE JOUER");
             couleurAJouer2 = Map.demandeCouleur(carteReele,2); //deuxieme joueur qui choisit sa couleur
             carteReele = caseAEtudier(carteReele,couleurAJouer2,2);
@@ -75,7 +82,7 @@ public class JeuDesCouleursJava {
         //on se ballade sur le plateau pour trouve une case possedee par le joueur
         for(int k=0;k<lignes;k++){
             for(int l=0;l<colones;l++){
-                Integer valleurCase = tab[k][l]%10;
+                Integer valleurCase = tab[k][l]%10;     //elle est possédée?
                 if(valleurCase.equals(joueur)){
                     tab[k][l] = couleur.numero*10+joueur;
                     //on en a trouvée une maintenant on se ballade AUTOUR de CETTE case
@@ -94,8 +101,17 @@ public class JeuDesCouleursJava {
         }
         return tab;
     }
+    //permet de sortir le nombre de lignes transmises par la fonction definitionTailleTableau()
+    public static int trouverNbLignes(int dimention){
+        int nblignes = dimention/100;
+        return nblignes;
+    }
+    public static int trouverNbColonnes(int dimention){
+        int nbcolonnes = dimention%100;
+        return nbcolonnes;
+    }
     
-    
+    //fin
     }
     
 

@@ -31,7 +31,42 @@ public class Map {
     ht.put(5, bleu);
     ht.put(6, indigo);
     }
-
+        // demande les dimension de la carte
+        public static int definitionTailleTableau(){
+            Scanner scan = new Scanner(System.in);
+            System.out.println("choisit la taille de la carte, elle doit être au moins de 5x5 et max 99x99 ");
+            System.out.println("ps: par deffaut elle fait 13x13");
+            System.out.println("nombre de lignes : ");
+            int lignes = scan.nextInt();
+            while(conformeTailleTableau(lignes)==false){
+                System.out.println("ton nombre de lignes n'est pas valide choisie en un entre 5 et 100 : ");
+                lignes = scan.nextInt();
+            }
+            /*
+            System.out.println("nombre de colones : ");
+            int colones = scan.nextInt();
+            while(conformeTailleTableau(colones)==false){
+                System.out.println("ton nombre de colonnes n'est pas valide choisie en un entre 5 et 100 : ");
+                colones = scan.nextInt();
+            }
+            */
+            System.out.println("tu viens de créé une carte de "+lignes+" par "+lignes);
+            int dimention = lignes*100+lignes ; //les deux premiers chiffres sont pour le nombre de lignes, les deux derniers pour le nb de colones
+            return dimention;
+        }
+        // on verifie si le nombre est correct
+        public static boolean conformeTailleTableau(int valleur){
+            if(valleur>=5 && valleur<100){
+//                System.out.println("true");
+                return true;
+            }
+            else{
+//                System.out.println("false");
+                return false;
+            }
+        }
+        
+        
         public int[][] creationTableau(int lignes, int colones){
             int[][] DeffaultGrille= new int[lignes][colones];
             for (int i=0 ; i<lignes ; i++){
@@ -58,7 +93,7 @@ public class Map {
                 for (int j=0;j<=1;j++){
                     //System.out.println("hey on va retap");
                     //System.out.println("coin top gauche : "+DeffaultGrille[i][j]);
-                    adapterCouleurCase(i,j,DeffaultGrille);
+                    DeffaultGrille[i][j] = adapterCouleurCase(i,j,DeffaultGrille);
                     //System.out.println("//////////////////////////////////////////");
                     
                 }
@@ -67,39 +102,74 @@ public class Map {
             for (int i=lignes-2 ; i<=lignes-1 ; i++){
                 for (int j=colones-2;j<=colones-1;j++){
                     //System.out.println("coin bot droit : "+DeffaultGrille[i][j]);
-                    adapterCouleurCase(i,j,DeffaultGrille);
-                    //System.out.println("//////////////////////////////////////////");
+                    DeffaultGrille[i][j] = adapterCouleurCase(i,j,DeffaultGrille);
+                    /*
+                    System.out.println("i : "+i);
+                    System.out.println("j : "+j);
+                    System.out.println("//////////////////////////////////////////");
+                    */
                     
                 }
+//                System.out.println("fin creation grille");
             }
-            
+//            System.out.println("1fin creation grille1");
             return DeffaultGrille;
         }
         
         //fait en sorte de  changer la couleur d'une case (pour eviter les cas tu commence et tu peux pas jouer)
         public static int adapterCouleurCase(int horizontal, int vertical, int[][] tab){
-            int lignes = tab.length;
-            int colones = tab[0].length;
-            if(vertical==0 && horizontal==0 ){
+            Integer lignes = tab.length;
+            Integer colones = tab[0].length;
+            
+            // j'ai separer les deux cas car sinon ca marche pas :x
+            if ((lignes.equals(colones))){
+                //on est le coin superieur gauche
+                if(vertical==0 && horizontal==0 ){
+                    return tab[horizontal][vertical];
+                }
+                //on est le coin inferieur droit
+                if(vertical==lignes-1 && horizontal==colones-1 ){
+                    return tab[horizontal][vertical];
+                }
+                //sinon autour
+                while(tab[horizontal][vertical]/10==tab[lignes-1][colones-1]/10 || tab[horizontal][vertical]/10==tab[0][0]/10){
+                    Random aleatoire = new Random();
+                    int nombre = aleatoire.nextInt(6)+1;
+                    tab[horizontal][vertical]=nombre*10;
+
+                }
                 return tab[horizontal][vertical];
             }
-            if(vertical==lignes-1 && horizontal==colones-1 ){
+            else{
+                //on est le coin superieur gauche
+                if(vertical==0 && horizontal==0 ){
+                    System.out.println("");
+                    return tab[horizontal][vertical];
+                }
+                //on est le coin inferieur droit
+                if(vertical==lignes-1 && horizontal==colones-1 ){
+                    return tab[horizontal][vertical];
+                }
+                //sinon autour
+                while(tab[horizontal][vertical]/10==tab[lignes-1][colones-1]/10 || tab[horizontal][vertical]/10==tab[0][0]/10){
+                    Random aleatoire = new Random();
+                    int nombre = aleatoire.nextInt(6)+1;
+
+                    System.out.println("horizontal : "+horizontal);
+                    System.out.println("vertical : "+vertical);
+                    System.out.println("lignes-1 : "+lignes);
+                    System.out.println("colones-1 : "+colones);
+                    System.out.println("tab[horizontal][vertical] : "+tab[horizontal][vertical]/10);
+                    System.out.println("tab[0][0] : "+tab[0][0]/10);
+                    System.out.println("tab[lignes-1][colones-1] : "+tab[lignes-1][colones-1]/10);
+                    System.out.println("modif de la tab : "+tab[horizontal][vertical]);
+                    System.out.println("________________________________________________");
+
+                    tab[horizontal][vertical]=nombre*10;
+
+                }
                 return tab[horizontal][vertical];
             }
-            while(tab[horizontal][vertical]/10==tab[lignes-1][colones-1]/10 || tab[horizontal][vertical]/10==tab[0][0]/10){
-                Random aleatoire = new Random();
-                int nombre = aleatoire.nextInt(6)+1;
-                /*System.out.println("horizontal : "+horizontal);
-                System.out.println("lignes-1 : "+lignes);
-                System.out.println("tab[horizontal][vertical] : "+tab[horizontal][vertical]/10);
-                System.out.println("tab[0][0] : "+tab[0][0]/10);
-                System.out.println("tab[lignes-1][colones-1] : "+tab[lignes-1][colones-1]/10);
-                System.out.println("modif de la tab : "+tab[horizontal][vertical]);
-                System.out.println("________________________________________________");*/
-                tab[horizontal][vertical]=nombre*10;
-                
-            }
-            return tab[horizontal][vertical];
         }
 
         public color trouverCouleur(int pouet){
@@ -131,17 +201,23 @@ public class Map {
             System.out.println("choisit une couleur 1 pour r 2|o 3|j 4|v 5|b 6|i");
             System.out.println("ton choix? : ");
             int a = scan.nextInt();
-            
+
             if (choixCouleur(ht.get(a),tab,joueur)==false){
                 System.out.println("tu ne peux pas prendre cette couleur");
                 System.out.println("________________________________________________");
                 System.out.println("essaye encore >:)");
-                demandeCouleur(tab,joueur);
                 
+                System.out.println("AVANT recursif"+a+" "+ht.get(a));
+                a = 0;
+                color apresRecursif = demandeCouleur(tab,joueur);
+                int azerty = apresRecursif.numero;
+                System.out.println("APRES recursif"+azerty+" "+ht.get(azerty));
+                return ht.get(azerty);
             }
-            
+            /*
             System.out.println("tu as choisis : "+a);
             System.out.println("________________________________________________");
+            */
             return ht.get(a);
         }
 
@@ -157,7 +233,7 @@ public class Map {
             Integer numCouleur = couleur.numero;
             //la couleur n'est pas celle d'un joueur
             if((couleurJoueur1.equals(numCouleur)) || (CouleurJoueur2.equals(numCouleur))){
-                System.out.println("boucle de dieu");
+//                System.out.println("boucle de dieu");
                 return false;
             }
             //la couleur est bien selectionnable (elle est présente dans l'environnement imedia de la zone controlée)
