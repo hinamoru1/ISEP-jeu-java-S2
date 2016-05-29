@@ -5,7 +5,6 @@
  */
 
 package jeudescouleursjava;
-import java.lang.*;
 import java.util.Random;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -15,12 +14,12 @@ import java.util.Scanner;
  */
 public class Map {
     //on crée les couleurs
-    color rouge = new color("R", "r", 1) ;
-    color orange = new color("O", "o", 2) ;
-    color jaune = new color("J", "j", 3) ;
-    color vert = new color("V", "v", 4) ;
-    color bleu = new color("B", "b", 5) ;
-    color indigo = new color("I", "i", 6) ;
+    static color rouge = new color("R", "r", 1) ;
+    static color orange = new color("O", "o", 2) ;
+    static color jaune = new color("J", "j", 3) ;
+    static color vert = new color("V", "v", 4) ;
+    static color bleu = new color("B", "b", 5) ;
+    static color indigo = new color("I", "i", 6) ;
     //on cree une table de achage
     static HashMap<Integer,color> ht = new HashMap<>();
     {

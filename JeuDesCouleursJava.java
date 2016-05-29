@@ -4,8 +4,10 @@
  * and open the template in the editor.
  */
 package jeudescouleursjava;
-import java.util.Scanner;
-import java.util.Random;
+//import java.awt.event.ActionEvent;
+//import java.util.Scanner;
+
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -13,33 +15,69 @@ import java.util.Random;
  */
 public class JeuDesCouleursJava {
 
-    public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
+    public static boolean choix;
+	public static color couleurAJouer;
+	public static void main(String[] args) {
+    	
+    	//@victor
+    	Fenetre Fen = new Fenetre();
+    	Fen.setVisible(true);
+    	int size = Fen.asksize();
+    	
+    	
+    	//
+    	
+        //Scanner scan = new Scanner(System.in);
         Map yolo=  new Map();
         
-        int dimentionTableau = Map.definitionTailleTableau();
-        int nbLignesCarte = trouverNbLignes(dimentionTableau);
-        int nbColonnesCarte = trouverNbColonnes(dimentionTableau);
-        int[][] carteReele = yolo.creationTableau(nbLignesCarte,nbColonnesCarte); //on met la carte cree dans une variable
+       //int dimentionTableau = Map.definitionTailleTableau();
+       // int nbLignesCarte = trouverNbLignes(dimentionTableau);
+        //int nbColonnesCarte = trouverNbColonnes(dimentionTableau);
+        
+        int[][] carteReele = yolo.creationTableau(size,size); //on met la carte cree dans une variable
         
         //int[][] carteReele = yolo.creationTableau(9,9); //on met la carte cree dans une variable
-        yolo.afficheTableau(carteReele);
+  
+        //yolo.afficheTableau(carteReele);
 //        System.out.println("");
 //        casePosedeMax(carteReele);
         
-        color couleurAJouer1;
+        //color couleurAJouer1;
                 
-        color couleurAJouer2;
+        //color couleurAJouer2;
+        
+        choix = false;
+        int Joueur = 1;
+        Fen.refresh(carteReele, Joueur);
+        Fen.Joueur(Joueur);
         while(casePosedeMax(carteReele)==false){
-            System.out.println("PREMIER JOUEUR A TOI DE JOUER");
-            couleurAJouer1 = Map.demandeCouleur(carteReele,1); //premiere joueur qui choisit sa couleur
-            carteReele = caseAEtudier(carteReele,couleurAJouer1,1);//ca modifie les valleurs
-            yolo.afficheTableau(carteReele);//on affiche
-
-            System.out.println("DEUXIEME JOUEUR A TOI DE JOUER");
-            couleurAJouer2 = Map.demandeCouleur(carteReele,2); //deuxieme joueur qui choisit sa couleur
-            carteReele = caseAEtudier(carteReele,couleurAJouer2,2);
-            yolo.afficheTableau(carteReele);
+        	
+           // System.out.println("PREMIER JOUEUR A TOI DE JOUER");
+            //couleurAJouer1 = Map.demandeCouleur(carteReele,1); //premiere joueur qui choisit sa couleur
+        	if (Joueur == 1 && choix){
+        		
+            carteReele = caseAEtudier(carteReele,couleurAJouer,Joueur);//ca modifie les valleurs
+            //yolo.afficheTableau(carteReele);//on affiche
+            
+            Joueur = 2;
+            Fen.refresh(carteReele, Joueur);
+            choix = false;
+            Fen.Joueur(Joueur);
+        	}
+        	
+        	if (Joueur ==2 && choix) {
+            
+            //System.out.println("DEUXIEME JOUEUR A TOI DE JOUER");
+            
+            //couleurAJouer2 = Map.demandeCouleur(carteReele,2); //deuxieme joueur qui choisit sa couleur
+            carteReele = caseAEtudier(carteReele,couleurAJouer,Joueur);
+            //yolo.afficheTableau(carteReele);
+           
+            Joueur = 1;
+            Fen.refresh(carteReele, Joueur);
+            choix = false;
+            Fen.Joueur(Joueur);
+        	}
         }
     }
     
@@ -58,14 +96,22 @@ public class JeuDesCouleursJava {
                 if((valeurTeste.equals(1))){
                     nbCaseJoueur1++;
                     if(nbCaseJoueur1>nbCaseFinale){
-                        System.out.println("♥ le premier joueur a gagné ♥");
+                    	JOptionPane.showMessageDialog(null,
+                    		    "Le gagnant est le joueur 1 !",
+                    		    "Partie termin�e !",
+                    		    JOptionPane.INFORMATION_MESSAGE,
+                    		    null);
                         return true;
                     }
                 }
                 else if((valeurTeste.equals(2))){
                     nbCaseJoueur2++;
                     if(nbCaseJoueur2>nbCaseFinale){
-                        System.out.println("♥ le deuxieme joueur a gagné ♥");
+                    	JOptionPane.showMessageDialog(null,
+                    		    "Le gagnant est le joueur 2 !",
+                    		    "Partie termin�e !",
+                    		    JOptionPane.INFORMATION_MESSAGE,
+                    		    null);
                         return true;
                     }
                 }
