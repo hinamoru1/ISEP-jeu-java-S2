@@ -16,7 +16,7 @@ public class JeuDesCouleursJava {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         Map yolo=  new Map();
-        
+
         int dimentionTableau = Map.definitionTailleTableau();
         int nbLignesCarte = trouverNbLignes(dimentionTableau);
         int nbColonnesCarte = trouverNbColonnes(dimentionTableau);
@@ -28,7 +28,6 @@ public class JeuDesCouleursJava {
 //        casePosedeMax(carteReele);
         
         color couleurAJouer1;
-                
         color couleurAJouer2;
         while(casePosedeMax(carteReele)==false){
             System.out.println("PREMIER JOUEUR A TOI DE JOUER");
@@ -40,6 +39,9 @@ public class JeuDesCouleursJava {
             couleurAJouer2 = Map.demandeCouleur(carteReele,2); //deuxieme joueur qui choisit sa couleur
             carteReele = caseAEtudier(carteReele,couleurAJouer2,2);
             yolo.afficheTableau(carteReele);
+            
+            //on sauvegarde automatiquement la partie dans un fichier autosave.txt à la racine
+/**/            joueur.ecrireGrille("autosave",carteReele);
         }
     }
     
@@ -67,18 +69,19 @@ public class JeuDesCouleursJava {
                     if(nbCaseJoueur2>nbCaseFinale){
                         System.out.println("♥ le deuxieme joueur a gagné ♥");
                         return true;
-                    }
                 }
             }
         }
+        }
+        System.out.println("score du joueur1 : "+nbCaseJoueur1);
+        System.out.println("score du joueur2 : "+nbCaseJoueur2);
         return false;
     }
-    public static void mettreAJourLaCarte(int[][] tab,color couleur,int joueur){
-        
-    }
+ 
     public static int[][] caseAEtudier(int[][] tab,color couleur,int joueur){
         int lignes = tab.length;
         int colones = tab[0].length;
+        int compteur = 0;
         //on se ballade sur le plateau pour trouve une case possedee par le joueur
         for(int k=0;k<lignes;k++){
             for(int l=0;l<colones;l++){
@@ -92,6 +95,7 @@ public class JeuDesCouleursJava {
                                 int test = tab[i][j]/10;    //on prend la couleur,le premier numero du chiffre, de la case qu'on etudie
                                 if (couleur.numero == test){
                                     tab[i][j] = couleur.numero*10+joueur; //on vient de marquer la case comme appartenant à un joueur
+                                    compteur++;
                                 }
                             }
                         }
@@ -99,8 +103,30 @@ public class JeuDesCouleursJava {
                 }
             }
         }
+        for(int k=lignes-1;k>=0;k--){
+            for(int l=colones-1;l>=0;l--){
+                Integer valleurCase = tab[k][l]%10;     //elle est possédée?
+                if(valleurCase.equals(joueur)){
+                    tab[k][l] = couleur.numero*10+joueur;
+                    //on en a trouvée une maintenant on se ballade AUTOUR de CETTE case
+                    for(int i=k-1; i<=k+1;i++){
+                        for(int j=l-1; j<=l+1;j++){
+                            if(i>=0 && i<tab.length && j>=0 && j<tab[0].length){  //avec ca on verifie si la case qu'on étudie est bien sur le plateau et pas a l'exterieur
+                                int test = tab[i][j]/10;    //on prend la couleur,le premier numero du chiffre, de la case qu'on etudie
+                                if (couleur.numero == test){
+                                    tab[i][j] = couleur.numero*10+joueur; //on vient de marquer la case comme appartenant à un joueur
+                                    compteur++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        casePosedeMax(tab);
         return tab;
     }
+    
     //permet de sortir le nombre de lignes transmises par la fonction definitionTailleTableau()
     public static int trouverNbLignes(int dimention){
         int nblignes = dimention/100;

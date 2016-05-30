@@ -9,6 +9,14 @@ import java.lang.*;
 import java.util.Random;
 import java.util.HashMap;
 import java.util.Scanner;
+
+import edu.princeton.cs.introcs.StdDraw;
+import java.io.IOException;
+import java.util.Scanner;
+import java.awt.Color;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 /**
  *
  * @author nicolas
@@ -154,7 +162,7 @@ public class Map {
                 while(tab[horizontal][vertical]/10==tab[lignes-1][colones-1]/10 || tab[horizontal][vertical]/10==tab[0][0]/10){
                     Random aleatoire = new Random();
                     int nombre = aleatoire.nextInt(6)+1;
-
+/*
                     System.out.println("horizontal : "+horizontal);
                     System.out.println("vertical : "+vertical);
                     System.out.println("lignes-1 : "+lignes);
@@ -164,7 +172,7 @@ public class Map {
                     System.out.println("tab[lignes-1][colones-1] : "+tab[lignes-1][colones-1]/10);
                     System.out.println("modif de la tab : "+tab[horizontal][vertical]);
                     System.out.println("________________________________________________");
-
+*/
                     tab[horizontal][vertical]=nombre*10;
 
                 }
@@ -196,22 +204,21 @@ public class Map {
             }
             System.out.println("");
         }
+       
         public static color demandeCouleur(int[][] tab,int joueur){
             Scanner scan = new Scanner(System.in);
             System.out.println("choisit une couleur 1 pour r 2|o 3|j 4|v 5|b 6|i");
             System.out.println("ton choix? : ");
             int a = scan.nextInt();
-
+            
             if (choixCouleur(ht.get(a),tab,joueur)==false){
                 System.out.println("tu ne peux pas prendre cette couleur");
                 System.out.println("________________________________________________");
                 System.out.println("essaye encore >:)");
                 
-                System.out.println("AVANT recursif"+a+" "+ht.get(a));
                 a = 0;
                 color apresRecursif = demandeCouleur(tab,joueur);
                 int azerty = apresRecursif.numero;
-                System.out.println("APRES recursif"+azerty+" "+ht.get(azerty));
                 return ht.get(azerty);
             }
             /*
