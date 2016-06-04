@@ -5,30 +5,21 @@
  */
 
 package jeudescouleursjava;
-import java.lang.*;
 import java.util.Random;
 import java.util.HashMap;
 import java.util.Scanner;
-
-import edu.princeton.cs.introcs.StdDraw;
-import java.io.IOException;
-import java.util.Scanner;
-import java.awt.Color;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.PrintWriter;
 /**
  *
  * @author nicolas
  */
 public class Map {
     //on crée les couleurs
-    color rouge = new color("R", "r", 1) ;
-    color orange = new color("O", "o", 2) ;
-    color jaune = new color("J", "j", 3) ;
-    color vert = new color("V", "v", 4) ;
-    color bleu = new color("B", "b", 5) ;
-    color indigo = new color("I", "i", 6) ;
+    static color rouge = new color("R", "r", 1) ;
+    static color orange = new color("O", "o", 2) ;
+    static color jaune = new color("J", "j", 3) ;
+    static color vert = new color("V", "v", 4) ;
+    static color bleu = new color("B", "b", 5) ;
+    static color indigo = new color("I", "i", 6) ;
     //on cree une table de achage
     static HashMap<Integer,color> ht = new HashMap<>();
     {
@@ -180,7 +171,7 @@ public class Map {
             }
         }
 
-        public color trouverCouleur(int pouet){
+        public static color trouverCouleur(int pouet){
             return ht.get(pouet);
            }
 
@@ -204,21 +195,40 @@ public class Map {
             }
             System.out.println("");
         }
-       
+        
+        public static void afficheTableauNormal(int[][] tableau){
+            int lignes = tableau.length;
+            int colones = tableau[0].length;
+            for (int i=0 ; i<lignes ; i++){
+                System.out.println("");
+                for (int j=0;j<colones;j++){
+                    
+                    System.out.print(tableau[i][j]+" "); //car non possédé
+                    
+                    }
+                    /*System.out.println()*/
+                }
+            System.out.println("");
+            }
+            
+        
+        
         public static color demandeCouleur(int[][] tab,int joueur){
             Scanner scan = new Scanner(System.in);
             System.out.println("choisit une couleur 1 pour r 2|o 3|j 4|v 5|b 6|i");
             System.out.println("ton choix? : ");
             int a = scan.nextInt();
-            
+
             if (choixCouleur(ht.get(a),tab,joueur)==false){
                 System.out.println("tu ne peux pas prendre cette couleur");
                 System.out.println("________________________________________________");
                 System.out.println("essaye encore >:)");
                 
+                System.out.println("AVANT recursif"+a+" "+ht.get(a));
                 a = 0;
                 color apresRecursif = demandeCouleur(tab,joueur);
                 int azerty = apresRecursif.numero;
+                System.out.println("APRES recursif"+azerty+" "+ht.get(azerty));
                 return ht.get(azerty);
             }
             /*
@@ -238,13 +248,15 @@ public class Map {
             Integer couleurJoueur1 = tab[0][0]/10;
             Integer CouleurJoueur2 = tab[lignes-1][colones-1]/10;
             Integer numCouleur = couleur.numero;
-            //la couleur n'est pas celle d'un joueur
-            if((couleurJoueur1.equals(numCouleur)) || (CouleurJoueur2.equals(numCouleur))){
-//                System.out.println("boucle de dieu");
+            //la couleur n'est pas celle de l'autre joueur
+            if((couleurJoueur1.equals(numCouleur)) && joueur == 2){
+                return false;
+            }
+            if((CouleurJoueur2.equals(numCouleur)) && joueur == 1){
                 return false;
             }
             //la couleur est bien selectionnable (elle est présente dans l'environnement imedia de la zone controlée)
-            for(int i =0;i<colones;i++){
+            for(int i =0;i<lignes;i++){
                 for(int j =0;j<colones;j++){
                     int caseEvalue = tab[i][j]%10;
                     if (joueur == caseEvalue){
@@ -256,6 +268,26 @@ public class Map {
             }
             return false; //on a fait toute les cases ayant le numero du joueur et on a pas trouver la couleur
         }
+        //meme fonction sauf qu'on ne verif pas les couleurs des joueurs
+        public static Boolean choixCouleur1(color couleur, int[][] tab, int joueur){
+            
+            int lignes = tab.length;
+            int colones = tab[0].length;
+                       
+            //la couleur est bien selectionnable (elle est présente dans l'environnement imedia de la zone controlée)
+            for(int i =0;i<lignes;i++){
+                for(int j =0;j<colones;j++){
+                    int caseEvalue = tab[i][j]%10;
+                    if (joueur == caseEvalue){
+                        if(couleurEstPresente1(couleur,tab,i,j,joueur)){
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false; //on a fait toute les cases ayant le numero du joueur et on a pas trouver la couleur
+        }
+        
         //on donne une couleur, une map ainsi qu'une position sur cette map et ca sort si la couleur est autour de la position 
         public static Boolean couleurEstPresente(color couleur, int[][] tab,int lignes,int colones){
             /*int lignesTab = tab.length;
@@ -273,6 +305,28 @@ public class Map {
             }
             return false;
         }
+        
+        public static Boolean couleurEstPresente1(color couleur, int[][] tab,int lignes,int colones,int joueur){
+            /*int lignesTab = tab.length;
+            int colonesTab = tab[0].length;*/
+            for(int i=lignes-1; i<=lignes+1;i++){
+                for(int j=colones-1; j<=colones+1;j++){
+                    if(i>=0 && i<tab.length && j>=0 && j<tab[0].length){  //avec ca on verifie si la case qu'on étudie est bien sur le plateau et pas a l'exterieur
+                        // on  verif si la case est pas au joueur
+                        if(tab[i][j]%10!=joueur){
+                            int test = tab[i][j]/10;
+                            if (couleur.numero == test){
+                                return true;
+                            }
+                        }
+                        
+                    }
+
+                }
+            }
+            return false;
+        }
+        
 
 
         }

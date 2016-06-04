@@ -19,3 +19,8 @@ public class color {
     }
     /*String tab[][]= {{"rouge","orange","jaune","vert","bleu","Indigo"},{"R","O","J","V","B","I"},{"r","o","j","v","b","i"}};*/
 }
+
+/*
+Integer parsed = Integer.parseInt(thisLine);
+System.out.println("Parsed integer = " + parsed);
+*/

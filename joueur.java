@@ -4,11 +4,13 @@
  * and open the template in the editor.
  */
 package jeudescouleursjava;
-
+/*
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+*/
+import java.io.*;
 
 /**
  *
@@ -35,50 +37,21 @@ public class joueur {
         System.out.println("on ne te demande pas de raconter ta vie...");
         return false;
     }
-    
-    //cette fonction a pour but que si le joueur a tester toutes les couleurs et qu'auncune ne peut etre joueur et bien ca declare vainceur l'autre joueur
-    //si on lui donne 1 ca veut dire que rouge à été selectionner et a fail
-    //donc on ne lui donne que de 1-6
-    public static int nePeuxPlusJouer(int nombre,int fail){
-        if(nombre==1 || nombre==2 || nombre==3 || nombre==4 || nombre==5 || nombre==6){
-            switch (fail){
-                case 1:
-                    return nombre+1;
-                case 2:
-                    return nombre+10;
-                case 3:
-                    return nombre+100;
-                case 4:
-                    return nombre+1000;
-                case 5:
-                    return nombre+10000;
-                case 6:
-                    return nombre+100000;
-            }
-        }
-        else{
-            //si c'est pas un fail valide on reset
-            return 000000;
-        }
-        return 000000;
-    }
-    
+
     //fonctiond de sauvegarde
     public static void ecrireGrille(String fichier,int[][] grille){
             int nbLignes=grille.length;
             int nbcolones=grille[0].length;
             try {
-                FileWriter fw = new FileWriter ( "grille.txt" ) ;
+                FileWriter fw = new FileWriter (fichier+".txt");
                 BufferedWriter bw = new BufferedWriter ( fw ) ;
 
                 PrintWriter pw = new PrintWriter ( bw ) ;
                 for(int i=0;i<nbLignes;i++){
                             for(int j=0;j<nbcolones;j++){
-                                
                                 pw.print(grille[i][j]); // écrit dans le fichier grille.txt à la racine du projet
-                                
                                 if(j<nbcolones-1){
-                                    pw.print(" ");
+                                    pw.print(",");
                                 }else{
                                     bw.newLine(); // retour chariot
                                 }
@@ -91,4 +64,41 @@ public class joueur {
                 System.exit(0);
             }
         }
+    
+    public static int[][] loadAutoSave(){
+        String filename = "autosave.txt";
+        try{
+            InputStream ips=new FileInputStream(filename); // Ouverture du fichier
+            InputStreamReader ipsr=new InputStreamReader(ips); // Overture du mode lecture
+            BufferedReader br=new BufferedReader(ipsr); // Onverture du buffered reader
+            String ligne;
+            // on le fait une premiere fois pour avoir la taille de la grille et pouvoir crée le tableau et le remplir
+            ligne=br.readLine();
+            String[] decompose = ligne.split(",");
+            int taille = decompose.length;
+            int[][] cases=new int[taille][taille];
+            // on remplit la premiere ligne du tableau
+            for(int j=0;j<taille;j++){
+                    cases[0][j]=Integer.parseInt(decompose[j]);
+                }
+            //on remplit le reste
+            for(int i=1;i<taille;i++){
+                ligne=br.readLine();
+                decompose = ligne.split(",");
+                for(int j=0;j<taille;j++){
+                    cases[i][j]=Integer.parseInt(decompose[j]);
+                }
+            }
+            System.out.println("plop");
+            Map.afficheTableauNormal(cases);
+            return cases;
+        }
+        catch (Exception e){
+            System.out.println(e.toString());
+        }
+        int[][] valeur = {{0,0},{0,0}};
+        return(valeur);
+    }
 }
+
+//awt get screen size
