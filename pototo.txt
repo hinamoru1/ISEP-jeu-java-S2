@@ -1,1 +1,5 @@
 branche1
+
+branche2
+
+merge of both
